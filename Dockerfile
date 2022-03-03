@@ -34,13 +34,6 @@ COPY --from=build_container /tacacs /tacacs
 COPY tac_plus.cfg /etc/tac_plus/tac_plus.cfg
 COPY docker-entry.sh /docker-entry.sh
 
-RUN apt update &&              \
-    apt install -y             \
-      libdigest-md5-perl       \
-      libio-socket-ssl-perl  \
-      libnet-ldap-perl      &&   \
-    rm -rf /var/cache/apt/*
-
 EXPOSE 49
 
 ENTRYPOINT ["/docker-entry.sh"]

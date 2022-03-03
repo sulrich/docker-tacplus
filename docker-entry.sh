@@ -16,10 +16,9 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# generate tac_plus syslog dir
+# generate tac_plus logging dir - this may be moved about by a container
+# binding mount.
 mkdir -p /var/log/tac_plus
 
 echo "starting tac_plus..."
-
-# Start the server
 exec ${TACPLUS} -f ${CONFIG_FILE}
