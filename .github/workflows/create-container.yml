@@ -33,10 +33,10 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            type=ref,event=branch,enabled=true
           flavor: |
             latest=auto
+          tags: |
+            type=ref,event=branch,enabled=true
 
       - name: build and push image
         uses: docker/build-push-action@v2
