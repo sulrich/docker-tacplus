@@ -1,9 +1,6 @@
 # compilation container
 FROM ubuntu:20.04 as build_container
 
-LABEL name=tac_plus
-LABEL version=0.1.0
-
 ARG TACPLUS_VERSION
 ARG TACPLUS_HASH
 
