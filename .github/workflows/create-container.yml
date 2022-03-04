@@ -32,11 +32,18 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          flavor: |
+            latest=auto
+          tags: |
+            type=ref,event=branch,enabled=true
 
       - name: build and push image
         uses: docker/build-push-action@v2
         with:
           context: .
           push: true
+          build-args: | 
+            TACPLUS_VERSION=202109260929
+            TACPLUS_HASH=7b6b741ba5ddba01e27cb83a36dfb8c74d61e18b4121584cf2302d0dc186f274
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
