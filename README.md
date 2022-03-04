@@ -14,11 +14,12 @@ specify some log files to be placed within `/var/log/tac_plus`. the
 find it useful to overlay `/var/log` with a volume mounting of my specification
 so i can see these logs.  
 
-additionally, i stick my personal `tac_plus.cfg` file in a personal location
-and override this with a binding mount. attempting to redirect tac_plus logs to
-STDOUT to facilitate grokking them via `docker logs -f <container_name>` has
-been a rabbit hole i haven't really gone down.  it looks like tac_plus seeks or
-pays attention to logfile location if you're not using syslog.
+additionally, i stick my personal `tac_plus.cfg` file in a handy location for
+containerlab, etc, and override this with a binding mount. attempting to
+redirect tac_plus logs to STDOUT to facilitate grokking them via `docker logs -f
+<container_name>` has been a rabbit hole i haven't really gone down.  it looks
+like tac_plus seeks or pays attention to logfile location if you're not using
+syslog.
 
 #### sample binding mounts
 
@@ -26,3 +27,7 @@ pays attention to logfile location if you're not using syslog.
   -v ${HOME}/clab/etc/tac_plus:/etc/tac_plus
   -v ${HOME}/clab/var/tac_plus:/var/log/tac_plus
 ```
+
+## references
+
+- [tac_plus documentation](https://www.pro-bono-publico.de/projects/unpacked/doc/tac_plus.pdf)
