@@ -34,7 +34,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=ref,event=pr,enabled=true
+            type=ref,event=branch,enabled=true
           flavor: |
             latest=auto
 
