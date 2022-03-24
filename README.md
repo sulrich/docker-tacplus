@@ -3,8 +3,8 @@
 minimal build and implementation of the tac_plus server from [marc
 huber](https://www.pro-bono-publico.de/projects/). 
 
-uses a container for bulding the binaries and then copies these to a target
-container with the misc. additional elements.
+this uses a container for bulding the binaries and then copies these to a target
+container with the various additional elements.
 
 ## notable files
 
@@ -21,11 +21,36 @@ redirect tac_plus logs to STDOUT to facilitate grokking them via `docker logs -f
 like tac_plus seeks or pays attention to logfile location if you're not using
 syslog.
 
-#### sample binding mounts
+this is not meant for anything remotely approximating production and has and
+embedded tacacs key (`sw33t_key`) and has the default credentials of ...
+spoiler alert! `admin/admin`.
+
+### sample binding mounts
+
+*vanilla docker*
 
 ```shell
   -v ${HOME}/clab/etc/tac_plus:/etc/tac_plus
   -v ${HOME}/clab/var/tac_plus:/var/log/tac_plus
+```
+
+*containerlab sample entry*
+
+the following binds the container to the management network in containerlab
+which is probably what you want anyway.
+
+```yaml
+    tacplus:
+      kind: linux
+      image: ghcr.io/sulrich/docker-tacplus:main
+      binds:
+        - ${HOME}/clab/etc/tac_plus:/etc/tac_plus
+        - ${HOME}/clab/var/tac_plus:/var/log/tac_plus
+      mgmt_ipv4: 172.20.20.xx
+
+
+  links:
+    - endpoints: ["tacplus:eth1", "mgmt-net:tacplus-eth1"]
 ```
 
 ## references
