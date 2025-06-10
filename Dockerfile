@@ -1,31 +1,45 @@
 # compilation container
-FROM ubuntu:20.04 as build_container
+FROM ubuntu:latest AS build_container
 
-ARG TACPLUS_VERSION
-ARG TACPLUS_HASH
+ARG TACPLUS_VERSION=master
+ARG DEBIAN_FRONTEND=noninteractive
 
-ADD "https://www.pro-bono-publico.de/projects/archive/DEVEL.${TACPLUS_VERSION}.tar.bz2" /tac_plus.tar.bz2
-RUN echo "${TACPLUS_HASH}  /tac_plus.tar.bz2" | sha256sum -c -
+# install git and build dependencies
+RUN apt update && \
+    apt install -y \
+      git \
+      bzip2 \
+      gcc \
+      libc6-dev \
+      libdigest-md5-perl \
+      libio-socket-ssl-perl \
+      libnet-ldap-perl \
+      make && \
+    apt clean && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN apt update &&                    \
-    apt install -y                   \
-      bzip2                          \
-      gcc                            \
-      libc6-dev                      \
-      libdigest-md5-perl             \
-      libio-socket-ssl-perl          \
-      libnet-ldap-perl               \
-      make &&                        \
-    tar -xf /tac_plus.tar.bz2 &&     \
-    cd PROJECTS &&                   \
-    ./configure --prefix=/tacacs &&  \
-    env SHELL=/bin/bash make &&      \
+# clone the repository
+RUN git clone https://github.com/MarcJHuber/event-driven-servers.git /src
+
+# build tacacs+
+WORKDIR /src
+RUN ./configure --prefix=/tacacs && \
+    env SHELL=/bin/bash make && \
     env SHELL=/bin/bash make install
 
-
-FROM ubuntu:20.04
+# runtime container
+FROM ubuntu:latest
 
 LABEL maintainer="steve ulrich (sulrich@botwerks.org)"
+
+# install runtime dependencies
+RUN apt update && \
+    apt install -y \
+      libdigest-md5-perl \
+      libio-socket-ssl-perl \
+      libnet-ldap-perl && \
+    apt clean && \
+    rm -rf /var/lib/apt/lists/*
 
 COPY --from=build_container /tacacs /tacacs
 COPY tac_plus.cfg /etc/tac_plus/tac_plus.cfg
