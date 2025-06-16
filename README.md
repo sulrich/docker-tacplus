@@ -2,7 +2,8 @@
 [![create and publish container](https://github.com/sulrich/docker-tacplus/actions/workflows/create-container.yml/badge.svg)](https://github.com/sulrich/docker-tacplus/actions/workflows/create-container.yml)
 
 minimal build and implementation of the tac_plus server from [marc
-huber](https://www.pro-bono-publico.de/projects/). 
+huber](https://www.pro-bono-publico.de/projects/).
+([github](https://github.com/MarcJHuber/event-driven-servers/))
 
 this uses a container for bulding the binaries and then copies these to a target
 container with the various additional elements that come along for the ride.
