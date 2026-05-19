@@ -1,7 +1,9 @@
 # compilation container
-FROM --platform=${TARGETPLATFORM} ubuntu:latest AS build_container
+FROM ubuntu:latest AS build_container
 
 ARG DEBIAN_FRONTEND=noninteractive
+ARG TACPLUS_VERSION
+ARG TACPLUS_HASH
 
 # update package lists and install ca-certificates first
 RUN apt-get update && \
@@ -14,15 +16,21 @@ RUN apt-get update && \
       gcc \
       git \
       libc6-dev \
+      libcrypt-dev \
+      libpam0g-dev \
       libpcre2-dev \
+      libssl-dev \
       libtool \
       make \
       pkg-config && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# clone the repository
-RUN git clone https://github.com/MarcJHuber/event-driven-servers.git /src
+# clone the repository and pin to the specified version
+RUN git clone https://github.com/MarcJHuber/event-driven-servers.git /src && \
+    if [ -n "${TACPLUS_VERSION}" ]; then \
+      cd /src && git checkout "${TACPLUS_VERSION}" 2>/dev/null || true; \
+    fi
 
 WORKDIR /src
 
@@ -37,7 +45,10 @@ FROM ubuntu:latest
 
 RUN apt-get update && \
     apt-get install -y \
-      libpcre2-8-0 && \
+      libcrypt1 \
+      libpam0g \
+      libpcre2-8-0 \
+      libssl3 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
